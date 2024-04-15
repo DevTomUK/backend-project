@@ -59,7 +59,39 @@ describe("/api", () => {
 })
 
 describe("/api/articles/:article_id", () => {
-    test("GET 200: Responds with a 200 when accessed", () => {
-        
+
+    test("GET 200: Responds with a 200 OK status and an object containing the article when accessed with a correct article_id", () => {
+        return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({body}) => {
+            expect(typeof body.article.author).toBe("string")
+            expect(typeof body.article.title).toBe("string")
+            expect(typeof body.article.article_id).toBe("number")
+            expect(typeof body.article.body).toBe("string")
+            expect(typeof body.article.topic).toBe("string")
+            expect(typeof body.article.created_at).toBe("string")
+            expect(typeof body.article.votes).toBe("number")
+            expect(typeof body.article.article_img_url).toBe("string")
+        })
     })
+
+    test("GET 400: Responds with 400 (Bad Request) when an incorrect id format is entered", () => {
+        return request(app)
+        .get("/api/articles/article-1")
+        .expect(400)
+        .then((err)=> {
+            expect(err.res.statusMessage).toBe("Bad Request")
+        })
+    })
+
+    test("GET 404: Responds with 404 (Not Found) when a non-existent id is entered", () => {
+        return request(app)
+        .get("/api/articles/99")
+        .expect(404)
+        .then((err)=> {
+            expect(err.res.statusMessage).toBe("Not Found")
+        })
+    })
+
 })
