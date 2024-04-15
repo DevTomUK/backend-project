@@ -25,5 +25,8 @@
         }
       ]
     }
+  },
+  "GET /api/articles/article_id": {
+    "description": "serves a specific article when a numerical value is entered"
   }
 }
