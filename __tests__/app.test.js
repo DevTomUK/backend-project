@@ -3,6 +3,7 @@ const app = require("../app.js")
 const db = require("../db/connection")
 const seed = require("../db/seeds/seed.js")
 const data = require("../db/data/test-data")
+const endpoints = require("../endpoints.json")
 
 beforeEach(() => {
     return seed(data);
@@ -13,8 +14,8 @@ beforeEach(() => {
   });
 
 describe("/api/topics", () => {
-    
-    test("GET 200: Should respond with a 200 OK status", () => {
+
+    test("GET 200: Should respond with a 200 OK status with correct endpoint", () => {
         return request(app)
         .get("/api/topics")
         .expect(200)
@@ -32,9 +33,23 @@ describe("/api/topics", () => {
         })
     })
 
-    test("GET 404: Should respond with a 404 if endpoint is incorrect", () => {
+    test("GET 404: Should respond with a 404 (Not found) if endpoint is incorrect", () => {
         return request(app)
         .get("/api/topic")
         .expect(404)
     })
+
+})
+
+describe("/api", () => {
+
+    test("Returns 200 OK and a response body of all of the available endpoints", () => {
+        return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({body}) => {
+            expect(body.endpoints).toEqual(endpoints)
+        })
+    })
+    
 })
