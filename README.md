@@ -11,7 +11,7 @@
 - supertest
 - express
   
-**Run npm run setup-dbs to create each database**  
+**Run npm run setup-dbs to create each database lcoally**  
 
 **Run npm run test to run tests**  
 
