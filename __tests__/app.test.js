@@ -13,6 +13,14 @@ beforeEach(() => {
     db.end();
   });
 
+describe("Non-existent endpoints", () => {
+    test("GET 404: Should respond with a 404 (Not found) if endpoint does not exist", () => {
+        return request(app)
+        .get("/api/non-existent")
+        .expect(404)
+    })
+})
+
 describe("/api/topics", () => {
 
     test("GET 200: Should respond with a 200 OK status with correct endpoint", () => {
@@ -33,12 +41,6 @@ describe("/api/topics", () => {
         })
     })
 
-    test("GET 404: Should respond with a 404 (Not found) if endpoint is incorrect", () => {
-        return request(app)
-        .get("/api/topic")
-        .expect(404)
-    })
-
 })
 
 describe("/api", () => {
@@ -52,4 +54,10 @@ describe("/api", () => {
         })
     })
     
+})
+
+describe("/api/articles/:article_id", () => {
+    test("GET 200: Responds with a 200 when accessed", () => {
+        
+    })
 })

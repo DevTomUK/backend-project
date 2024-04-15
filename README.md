@@ -5,7 +5,7 @@
 ***Requirements:***
 
 **.env file required for test and development.**  
-- create .env.test and .env.development containing PGDATABASE=*database-name* 
+- create .env.test and .env.development containing `PGDATABASE=*database-name*`
   
 **npm install to install dependencies**  
 - supertest
