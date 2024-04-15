@@ -13,22 +13,28 @@ beforeEach(() => {
   });
 
 describe("/api/topics", () => {
+    
     test("GET 200: Should respond with a 200 OK status", () => {
         return request(app)
         .get("/api/topics")
         .expect(200)
     })
+
     test("GET 200: Should respond with all topics", () => {
         return request(app)
         .get("/api/topics")
         .then(({body}) => {
-            expect(body).toEqual(    
-            [
+            expect(body).toEqual([
                 { slug: 'mitch', description: 'The man, the Mitch, the legend' },
                 { slug: 'cats', description: 'Not dogs' },
                 { slug: 'paper', description: 'what books are made of' }
-            ]
-        )
+            ])
         })
+    })
+
+    test("GET 404: Should respond with a 404 if endpoint is incorrect", () => {
+        return request(app)
+        .get("/api/topic")
+        .expect(404)
     })
 })
