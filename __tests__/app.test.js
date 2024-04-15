@@ -33,7 +33,9 @@ describe("/api/topics", () => {
         return request(app)
         .get("/api/topics")
         .then(({body}) => {
-            expect(body).toEqual([
+            expect(body.topics).toEqual(
+                
+                [
                 { slug: 'mitch', description: 'The man, the Mitch, the legend' },
                 { slug: 'cats', description: 'Not dogs' },
                 { slug: 'paper', description: 'what books are made of' }
