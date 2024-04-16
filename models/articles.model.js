@@ -12,4 +12,30 @@ function fetchArticlesById(id) {
     })
 }
 
-module.exports = fetchArticlesById
+async function fetchArticles() {
+    
+        const articlesData = await db.query(
+            `SELECT * FROM articles ORDER BY created_at DESC`
+        )
+        const commentsData = await db.query(
+            `SELECT * FROM comments`
+        )
+    
+        const articles = articlesData.rows
+        const comments = commentsData.rows
+
+        articles.forEach((article)=>{
+            let commentCount = 0
+            delete article.body
+            comments.forEach((comment)=>{
+                if (article.article_id === comment.article_id) {
+                    commentCount ++
+                }            
+            })
+            article.comments = commentCount
+        })
+
+        return articles
+}
+
+module.exports = {fetchArticlesById, fetchArticles}

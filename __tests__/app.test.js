@@ -18,6 +18,8 @@ describe("Non-existent endpoints", () => {
         return request(app)
         .get("/api/non-existent")
         .expect(404)
+        .then(({body}) => {
+        })
     })
 })
 
@@ -80,8 +82,8 @@ describe("/api/articles/:article_id", () => {
         return request(app)
         .get("/api/articles/article-1")
         .expect(400)
-        .then((err)=> {
-            expect(err.res.statusMessage).toBe("Bad Request")
+        .then(({body})=> {
+            expect(body.msg).toBe("Bad Request")
         })
     })
 
@@ -89,9 +91,38 @@ describe("/api/articles/:article_id", () => {
         return request(app)
         .get("/api/articles/99")
         .expect(404)
-        .then((err)=> {
-            expect(err.res.statusMessage).toBe("Not Found")
+        .then(({body})=> {
+            expect(body.msg).toBe("Not Found")
         })
     })
+})
 
+describe("/api/articles", () => {
+    test("GET 200: Responds with a list of all articles, ordered by created_by", () => {
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({body}) => {
+            const articles = body.articles
+
+            expect(articles.length).toBe(13)
+
+            articles.forEach((article)=>{
+                expect(article).toMatchObject({
+                    article_id: expect.any(Number),
+                    title: expect.any(String),
+                    topic: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String),
+                    comments: expect.any(Number)
+                })
+            })
+
+            expect(articles).not.toContain("body")
+
+            expect(articles).toBeSortedBy("created_at", { descending: true })
+        
+        })
+    })
 })

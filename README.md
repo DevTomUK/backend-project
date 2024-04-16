@@ -10,6 +10,7 @@
 **npm install to install dependencies**  
 - supertest
 - express
+- jest-sorted
   
 **Run npm run setup-dbs to create each database lcoally**  
 

@@ -1,4 +1,4 @@
-const fetchArticlesById = require("../models/articles.model")
+const {fetchArticlesById, fetchArticles} = require("../models/articles.model")
 
 function getArticlesById(req, res, next) {
     const {article_id} = req.params
@@ -12,4 +12,14 @@ function getArticlesById(req, res, next) {
     
 }
 
-module.exports = getArticlesById
+function getArticles(req, res, next) {
+    fetchArticles()
+    .then((body) => {
+        res.status(200).send({articles: body})
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+module.exports = {getArticlesById, getArticles }
