@@ -67,14 +67,15 @@ describe("/api/articles/:article_id", () => {
         .get("/api/articles/1")
         .expect(200)
         .then(({body}) => {
-            expect(typeof body.article.author).toBe("string")
-            expect(typeof body.article.title).toBe("string")
-            expect(typeof body.article.article_id).toBe("number")
-            expect(typeof body.article.body).toBe("string")
-            expect(typeof body.article.topic).toBe("string")
-            expect(typeof body.article.created_at).toBe("string")
-            expect(typeof body.article.votes).toBe("number")
-            expect(typeof body.article.article_img_url).toBe("string")
+            console.log(body)
+            expect(typeof body.author).toBe("string")
+            expect(typeof body.title).toBe("string")
+            expect(typeof body.article_id).toBe("number")
+            expect(typeof body.body).toBe("string")
+            expect(typeof body.topic).toBe("string")
+            expect(typeof body.created_at).toBe("string")
+            expect(typeof body.votes).toBe("number")
+            expect(typeof body.article_img_url).toBe("string")
         })
     })
 
@@ -125,4 +126,96 @@ describe("/api/articles", () => {
         
         })
     })
+})
+
+
+describe("/api/articles/:article_id/comments", () => {
+    test("GET 200: Responds with a 200 OK status", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+    })
+
+    test("GET 200: Responds with a list of the correct length", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .then(({body})=> {
+           const {comments} = body
+           expect(comments.length).toBe(11)
+
+        })
+    })
+
+    test("GET 200: Responds with a list of all comments from a particular article", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .then(({body})=> {
+           const {comments} = body
+
+           comments.forEach((comment)=>{
+            expect(comment.article_id).toBe(1)
+           })
+
+        })
+    })
+
+    test("GET 200: Response contains all of the correct object keys", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .then(({body})=> {
+           const {comments} = body
+
+           comments.forEach((comment)=>{
+            expect(comment).toMatchObject({
+                comment_id: expect.any(Number),
+                body: expect.any(String),
+                article_id: expect.any(Number),
+                author: expect.any(String),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+            })
+        })
+
+        })
+    })
+
+    test("GET 200: Comments are all ordered by created_at: descending", () => {
+        return request(app)
+        .get("/api/articles/1/comments")
+        .then(({body})=> {
+           const {comments} = body
+
+            expect(comments).toBeSortedBy("created_at", {descending: true})
+
+        })
+    })
+
+    test("GET 400: Returns a 400 (Bad request) when an incorrect article_id format is entered", () => {
+        return request(app)
+        .get("/api/articles/firstArticle/comments")
+        .expect(400)
+        .then(({body})=> {
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+
+    test("GET 404: Returns a 404 (Not Found) when a non-existant article_id is entered", () => {
+        return request(app)
+        .get("/api/articles/999/comments")
+        .expect(404)
+        .then(({body})=> {
+            expect(body.msg).toBe("Not Found")
+        })
+    })
+
+    // THIS TEST NEEDS TO GIVE A DIFFERENT ERROR MESSAGE BACK
+    test("GET 200: Returns a 200 when an article exists but has no comments", () => {
+        return request(app)
+        .get("/api/articles/10/comments")
+        .expect(200)
+        .then(({body})=> {
+            expect(body.comments.length).toBe(0)
+        })
+    })
+
 })

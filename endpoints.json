@@ -28,5 +28,8 @@
   },
   "GET /api/articles/article_id": {
     "description": "serves a specific article when a numerical value is entered"
+  },
+  "GET /spi/srticles/:article_id/comments": {
+    "description": "serves all comments from a particular article_id"
   }
 }

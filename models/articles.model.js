@@ -8,7 +8,8 @@ function fetchArticlesById(id) {
         if (article.rows.length === 0) {
             return Promise.reject({ status: 404, msg: "Not Found" })
         }
-        return article
+        
+        return article.rows[0]
     })
 }
 
@@ -38,4 +39,18 @@ async function fetchArticles() {
         return articles
 }
 
-module.exports = {fetchArticlesById, fetchArticles}
+function checkArticleExists(id) {
+    return db.query(
+        `SELECT * FROM articles WHERE article_id = $1`, [id]
+    )
+    
+    .then(({rows})=>{
+        if (rows.length === 0) {
+            return Promise.reject({status: 404, msg: "Not Found"})
+        }
+
+        return rows
+    }) 
+}
+
+module.exports = {fetchArticlesById, fetchArticles, checkArticleExists}

@@ -1,10 +1,14 @@
-const {fetchArticlesById, fetchArticles} = require("../models/articles.model")
+const {fetchArticlesById, fetchArticles, checkArticleExists} = require("../models/articles.model")
+
 
 function getArticlesById(req, res, next) {
     const {article_id} = req.params
+
     fetchArticlesById(article_id)
-    .then(({rows}) => {
-        res.status(200).send({article: rows[0]})
+
+    .then((data) => {
+
+        res.status(200).send(data)
     })
     .catch((err) => {
         next(err)
