@@ -67,7 +67,7 @@ describe("/api/articles/:article_id", () => {
         .get("/api/articles/1")
         .expect(200)
         .then(({body}) => {
-            console.log(body)
+
             expect(typeof body.author).toBe("string")
             expect(typeof body.title).toBe("string")
             expect(typeof body.article_id).toBe("number")
@@ -208,7 +208,6 @@ describe("/api/articles/:article_id/comments", () => {
         })
     })
 
-    // THIS TEST NEEDS TO GIVE A DIFFERENT ERROR MESSAGE BACK
     test("GET 200: Returns a 200 when an article exists but has no comments", () => {
         return request(app)
         .get("/api/articles/10/comments")
@@ -218,4 +217,66 @@ describe("/api/articles/:article_id/comments", () => {
         })
     })
 
+    test("POST 201: Posts a comment with a body of username and body, then returns the new comment", () => {
+
+        const body = {
+            username: 'butter_bridge',
+            body: "This is my comment!"
+        }
+
+        return request(app)
+        .post("/api/articles/10/comments")
+        .send(body)
+        .expect(201)
+        .then(({body}) => {
+
+            expect(body).toMatchObject({
+                comment_id: expect.any(Number),
+                body: expect.any(String),
+                article_id: expect.any(Number),
+                author: expect.any(String),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+            })
+
+            expect(body.body).toBe("This is my comment!")
+            expect(body.author).toBe("butter_bridge")
+        })
+    })
+
+    test("POST 400: Returns an error if an unkown username is used", () => {
+
+        const body = {
+            username: 'unknown-user',
+            body: "This is my comment!"
+        }
+
+        return request(app)
+        .post("/api/articles/10/comments")
+        .send(body)
+        .expect(400)
+        .then(({body}) => {
+
+            expect(body.msg).toBe("Invalid Entry")
+
+        })
+    })
+
+    test("POST 400: Returns an error if an invalid id is used", () => {
+
+        const body = {
+            username: 'butter_bridge',
+            body: "This is my comment!",
+        }
+
+        return request(app)
+        .post("/api/articles/999/comments")
+        .send(body)
+        .expect(400)
+        .then(({body}) => {
+
+            expect(body.msg).toBe("Invalid Entry")
+
+        })
+    })
 })

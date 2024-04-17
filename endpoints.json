@@ -29,7 +29,10 @@
   "GET /api/articles/article_id": {
     "description": "serves a specific article when a numerical value is entered"
   },
-  "GET /spi/srticles/:article_id/comments": {
+  "GET /api/articles/:article_id/comments": {
     "description": "serves all comments from a particular article_id"
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "Posts a comment to a specific article ID"
   }
 }

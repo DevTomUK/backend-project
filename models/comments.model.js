@@ -10,4 +10,21 @@ function fetchCommentsByArticleId(id) {
     })
 }
 
-module.exports = fetchCommentsByArticleId
+function insertCommentByArticleId(id, body) {
+
+    return db.query(
+        `INSERT INTO comments(article_id, body, author)
+        VALUES ($1, $2, $3)
+        RETURNING *;`, 
+        [id, body.body, body.username]
+    )
+    .then(({rows})=>{
+        if (rows.length === 0) {
+            return Promise.reject({status: 404, msg: "Not Found"})
+        }
+        return rows[0]
+    })
+
+}
+
+module.exports = {fetchCommentsByArticleId, insertCommentByArticleId}
