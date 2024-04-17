@@ -34,5 +34,8 @@
   },
   "POST /api/articles/:article_id/comments": {
     "description": "Posts a comment to a specific article ID"
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "Patches a specific article with it's ID"
   }
 }

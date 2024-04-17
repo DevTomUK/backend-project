@@ -96,6 +96,52 @@ describe("/api/articles/:article_id", () => {
             expect(body.msg).toBe("Not Found")
         })
     })
+
+    test("PATCH 200: Responds with 200 OK when a valid patch request is sent", () => {
+
+        const body = {
+            inc_votes: 1
+        }
+
+        return request(app)
+        .patch("/api/articles/1")
+        .send(body)
+        .expect(200)
+        .then(({body})=> {
+            expect(body.updatedRow.votes).toBe(101)
+        })
+    })
+
+    test("PATCH 200: Responds with 200 OK when a valid patch request is sent", () => {
+
+        const body = {
+            inc_votes: -100
+        }
+
+        return request(app)
+        .patch("/api/articles/1")
+        .send(body)
+        .expect(200)
+        .then(({body})=> {
+            expect(body.updatedRow.votes).toBe(0)
+        })
+    })
+
+    test("PATCH 400: Responds with 400 if an incorrect type is entered", () => {
+
+        const body = {
+            inc_votes: "I should be a number!"
+        }
+
+        return request(app)
+        .patch("/api/articles/1")
+        .send(body)
+        .expect(400)
+        .then(({body})=> {
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+
 })
 
 describe("/api/articles", () => {
