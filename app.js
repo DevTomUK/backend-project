@@ -4,7 +4,7 @@ const getTopics = require("./controllers/topics.controller")
 const getEndpoints = require("./controllers/app.controller")
 const {getArticlesById, getArticles, patchArticleByArticleId } = require("./controllers/articles.controller")
 const {getCommentsByArticleId, postCommentByArticleId, removeComment } = require("./controllers/comments.controller")
-
+const getUsers = require("./controllers/users.controller")
 
 app.get("/api/topics", getTopics)
 
@@ -23,6 +23,8 @@ app.post("/api/articles/:article_id/comments", postCommentByArticleId)
 app.patch("/api/articles/:article_id", patchArticleByArticleId)
 
 app.delete("/api/comments/:comment_id", removeComment)
+
+app.get("/api/users", getUsers)
 
 app.use((err, req, res, next) => {
     if (err.code === "22P02") {
