@@ -36,7 +36,6 @@ function deleteComment(id) {
     )
     .then(({rows})=>{
         if (rows.length === 0) {
-            console.log("HIT")
             return Promise.reject({status: 404, msg: "No comment with that ID"})
         }
         return {deleted: rows[0]}
