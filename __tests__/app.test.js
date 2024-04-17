@@ -326,3 +326,21 @@ describe("/api/articles/:article_id/comments", () => {
         })
     })
 })
+
+describe("/api/comments/:comment_id", () => {
+    test("GET 204: Responds with 204 when comment delete is OK", () => {
+        return request(app)
+        .delete("/api/comments/1")
+        .expect(204)
+    })
+
+    test("GET 404: Responds with 404 when delete is attempted on a comment ID which does not exist", () => {
+        return request(app)
+        .delete("/api/comments/999")
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("No comment with that ID")
+        })
+    })
+
+})
