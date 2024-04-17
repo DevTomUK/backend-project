@@ -3,7 +3,8 @@ const app = express()
 const getTopics = require("./controllers/topics.controller")
 const getEndpoints = require("./controllers/app.controller")
 const {getArticlesById, getArticles} = require("./controllers/articles.controller")
-const getCommentsByArticleId = require("./controllers/comments.controller")
+const {getCommentsByArticleId, postCommentByArticleId} = require("./controllers/comments.controller")
+
 
 app.get("/api/topics", getTopics)
 
@@ -15,9 +16,16 @@ app.get("/api/articles", getArticles)
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
+app.use(express.json())
+
+app.post("/api/articles/:article_id/comments", postCommentByArticleId)
+
 app.use((err, req, res, next) => {
     if (err.code === "22P02") {
        res.status(400).send({msg: "Bad Request"})
+    }
+    if (err.code === "23503") {
+      res.status(400).send({msg: "Invalid Entry"})
     }
      res.status(err.status).send({msg: err.msg})
 })
