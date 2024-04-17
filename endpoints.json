@@ -37,5 +37,8 @@
   },
   "PATCH /api/articles/:article_id": {
     "description": "Patches a specific article with it's ID"
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "Deletes a comment by using comment ID"
   }
 }
