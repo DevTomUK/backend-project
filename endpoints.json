@@ -40,5 +40,8 @@
   },
   "DELETE /api/comments/:comment_id": {
     "description": "Deletes a comment by using comment ID"
+  },
+  "GET /api/users": {
+    "description": "serves a list of all users"
   }
 }
