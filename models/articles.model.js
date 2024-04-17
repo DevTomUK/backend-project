@@ -53,4 +53,18 @@ function checkArticleExists(id) {
     }) 
 }
 
-module.exports = {fetchArticlesById, fetchArticles, checkArticleExists}
+function updateArticleByArticleId(body, id){
+    return db.query(
+    `UPDATE articles
+    SET
+    votes = votes + $1
+    WHERE article_id = $2
+    RETURNING *`,
+    [body.inc_votes, id]
+    )
+    .then(({rows}) => {
+        return rows
+    })
+}
+
+module.exports = {fetchArticlesById, fetchArticles, checkArticleExists, updateArticleByArticleId }
