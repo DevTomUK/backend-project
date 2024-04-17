@@ -13,14 +13,29 @@ function fetchArticlesById(id) {
     })
 }
 
-async function fetchArticles() {
-    
-        const articlesData = await db.query(
+async function fetchArticles(query) {
+
+    let articlesData
+
+    if (query.topic) {
+        articlesData = await db.query(
+            `SELECT * FROM articles WHERE topic = $1 ORDER BY created_at DESC`, 
+            [query.topic]
+        )
+    } else {
+        articlesData = await db.query(
             `SELECT * FROM articles ORDER BY created_at DESC`
         )
+    }
+    
+        
         const commentsData = await db.query(
             `SELECT * FROM comments`
         )
+
+        if (articlesData.rows.length === 0) {
+            return Promise.reject({ status: 404, msg: "No articles found" })
+        }
     
         const articles = articlesData.rows
         const comments = commentsData.rows

@@ -145,6 +145,7 @@ describe("/api/articles/:article_id", () => {
 })
 
 describe("/api/articles", () => {
+
     test("GET 200: Responds with a list of all articles, ordered by created_by", () => {
         return request(app)
         .get("/api/articles")
@@ -172,6 +173,45 @@ describe("/api/articles", () => {
         
         })
     })
+
+    test("GET 200: Responds with a list of all articles containing a chosen query - Topic", () => {
+        return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({body}) => {
+            const articles = body.articles
+
+            expect(articles.length).toBe(12)
+
+            articles.forEach((article)=>{
+                expect(article).toMatchObject({
+                    article_id: expect.any(Number),
+                    title: expect.any(String),
+                    topic: "mitch",
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String),
+                    comments: expect.any(Number)
+                })
+            })
+
+            expect(articles).not.toContain("body")
+
+            expect(articles).toBeSortedBy("created_at", { descending: true })
+        
+        })
+    })
+
+    test("GET 404: Responds with a 404 (Not found) if an unknown query choice is entered", () => {
+        return request(app)
+        .get("/api/articles?topic=thisdoesntexist")
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("No articles found")
+        
+        })
+    })
+
 })
 
 
