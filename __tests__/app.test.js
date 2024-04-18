@@ -79,6 +79,17 @@ describe("/api/articles/:article_id", () => {
         })
     })
 
+    test("GET 200: FEATURE REQUEST - response should now also contain a comment_count key", () => {
+        return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({body}) => {
+
+            expect(body.comment_count).toBe(11)
+
+        })
+    })
+
     test("GET 400: Responds with 400 (Bad Request) when an incorrect id format is entered", () => {
         return request(app)
         .get("/api/articles/article-1")
@@ -163,7 +174,7 @@ describe("/api/articles", () => {
                     created_at: expect.any(String),
                     votes: expect.any(Number),
                     article_img_url: expect.any(String),
-                    comments: expect.any(Number)
+                    comment_count: expect.any(Number)
                 })
             })
 
@@ -191,7 +202,7 @@ describe("/api/articles", () => {
                     created_at: expect.any(String),
                     votes: expect.any(Number),
                     article_img_url: expect.any(String),
-                    comments: expect.any(Number)
+                    comment_count: expect.any(Number)
                 })
             })
 
@@ -213,7 +224,6 @@ describe("/api/articles", () => {
     })
 
 })
-
 
 describe("/api/articles/:article_id/comments", () => {
     test("GET 200: Responds with a 200 OK status", () => {
