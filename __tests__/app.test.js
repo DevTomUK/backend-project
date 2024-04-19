@@ -162,6 +162,7 @@ describe("/api/articles", () => {
         .get("/api/articles")
         .expect(200)
         .then(({body}) => {
+            
             const articles = body.articles
 
             expect(articles.length).toBe(13)
@@ -222,6 +223,27 @@ describe("/api/articles", () => {
         
         })
     })
+
+    test("GET 400: Responds with a 400 if an unknown query choice is entered", () => {
+        return request(app)
+        .get("/api/articles?sort_by=up")
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Incorrect sort by request")
+        
+        })
+    })
+
+    test("GET 400: Responds with a 400 if an unknown query choice is entered", () => {
+        return request(app)
+        .get("/api/articles?order=anyorder")
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Incorrect order by request")
+        
+        })
+    })
+
 
 })
 
